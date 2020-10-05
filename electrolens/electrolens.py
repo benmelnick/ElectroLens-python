@@ -19,10 +19,10 @@ from sklearn.preprocessing import normalize
 
 def check_versions():
     ver = cef.GetVersion()
-    print("[ElectroLens] CEF Python {ver}".format(ver=ver["version"]))
-    print("[ElectroLens] Chromium {ver}".format(ver=ver["chrome_version"]))
-    print("[ElectroLens] CEF {ver}".format(ver=ver["cef_version"]))
-    print("[ElectroLens] Python {ver} {arch}".format(
+    print("[electrolens] CEF Python {ver}".format(ver=ver["version"]))
+    print("[electrolens] Chromium {ver}".format(ver=ver["chrome_version"]))
+    print("[electrolens] CEF {ver}".format(ver=ver["cef_version"]))
+    print("[electrolens] Python {ver} {arch}".format(
            ver=platform.python_version(),
            arch=platform.architecture()[0]))
     assert cef.__version__ >= "57.0", "CEF Python v57.0+ required to run this"
@@ -54,7 +54,7 @@ def view(data, show_dev_tools = False, save_config = True, config_filename = "co
     index_filepath = "file://" + os.path.join(dir_path, 'static/index_cefpython_clean.html')
     print(index_filepath)
     browser = cef.CreateBrowserSync(url=index_filepath,
-                                    window_title="ElectroLens", 
+                                    window_title="ElectroLens",
                                     settings = browser_setting)
     browser.SetClientHandler(LoadHandler(config))
     if show_dev_tools:
