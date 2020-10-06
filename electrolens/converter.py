@@ -5,6 +5,11 @@ from ase import Atoms
 from ase.io.trajectory import TrajectoryReader
 from sklearn.preprocessing import normalize
 
+
+def atom_config(atom):
+    return {"x": atom.position[0], "y": atom.position[1], "z": atom.position[2], "atom": atom.symbol}
+
+
 class Converter(object):
     def __init__(self, data):
         self.data = data
@@ -26,7 +31,7 @@ class Converter(object):
     def to_config(self, lattice_constants, lattice_vector):
         system_dimension = {"x": lattice_constants[0], "y": lattice_constants[1], "z": lattice_constants[2]}
 
-        # top level JSON to be returned
+        # configuration dictionary to be returned
         config = {"views": [], "plotSetup": {"moleculePropertyList": ["atom"]}}
 
         # temporary dictionary to hold nested JSON - will eventually go in config["views"]
@@ -60,7 +65,7 @@ class Converter(object):
                 for frame in range(num_frames):
                     for atom in self.data[frame]:
                         atom_count += 1
-                        temp_atom = self.atom_config(atom)
+                        temp_atom = atom_config(atom)
                         # add the frame number to the JSON for this atom
                         temp_atom["frame"] = frame
                         temp["moleculeData"]["data"].append(temp_atom)
@@ -85,7 +90,7 @@ class Converter(object):
             for atom in self.data:
                 atom_count += 1
                 # add the data to config file
-                temp["moleculeData"]["data"].append(self.atom_config(atom))
+                temp["moleculeData"]["data"].append(atom_config(atom))
         print(f"[Converter] Successfully processed {atom_count} items")
 
         # add all of the molecular data found to the config file
@@ -97,8 +102,4 @@ class Converter(object):
             json.dump(config, fp, indent=4)
 
         return config
-
-
-    def atom_config(self, atom):
-        return {"x": atom.position[0], "y": atom.position[1], "z": atom.position[2], "atom": atom.symbol}
 

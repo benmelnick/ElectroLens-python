@@ -4,6 +4,8 @@ inter-process messaging with the use of Javascript Bindings.
 """
 
 from cefpython3 import cefpython as cef
+import json
+from json.decoder import JSONDecodeError
 import platform
 import sys
 import os
@@ -24,8 +26,13 @@ def view(data, show_dev_tools = False, save_config = True, config_filename = "co
     print("[ElectroLens] Starting...")
     check_versions()
 
-    converter = Converter(data)
-    config = converter.convert()
+    # attempt to deserialize data as a JSON file, if failure or invalid JSON returned - convert it
+    config = {}
+    try:
+        config = json.load(data)
+    except:
+        print("[ElectroLens] data is not JSON, converting")
+        config = Converter(data).convert()
 
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     settings = {
