@@ -22,6 +22,7 @@ def check_versions():
            arch=platform.architecture()[0]))
     assert cef.__version__ >= "57.0", "CEF Python v57.0+ required to run this"
 
+
 def view(data, show_dev_tools = False, save_config = True, config_filename = "config.json"):
     print("[ElectroLens] Starting...")
     check_versions()
@@ -30,7 +31,8 @@ def view(data, show_dev_tools = False, save_config = True, config_filename = "co
     config = {}
     try:
         config = json.load(data)
-    except:
+    except Exception as e:
+        print(f"[ElectroLens] {e}")
         print("[ElectroLens] data is not JSON, converting")
         config = Converter(data).convert()
 
